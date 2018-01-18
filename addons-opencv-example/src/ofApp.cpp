@@ -1,22 +1,62 @@
 #include "ofApp.h"
 
+using namespace ofxCv;
+using namespace cv;
+
+// based on Kyle McDonald's ofxCv basic contours example
+// https://github.com/kylemcdonald/ofxCv/blob/master/example-contours-basic/src/ofApp.cpp
+
 //--------------------------------------------------------------
 void ofApp::setup(){
+    grabber.setup(ofGetWidth(), ofGetHeight());
+    gui.setup();
+    gui.add(minArea.set("Min area", 10, 1, 100));
+    gui.add(maxArea.set("Max area", 200, 1, 500));
+    gui.add(threshold.set("Threshold", 128, 0, 255));
+    gui.add(smoothing.set("Smoothing", 0, 0, 50));
+    gui.add(holes.set("Holes", false));
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    grabber.update();
+    
+    if (grabber.isFrameNew()) {
+        ofPixels pixels = grabber.getPixels();
+        pixels.mirror(false, true);
+        
+        ofImage image;
+        image.setFromPixels(pixels);
+        
+        contourFinder.setMinAreaRadius(minArea);
+        contourFinder.setMaxAreaRadius(maxArea);
+        contourFinder.setThreshold(threshold);
+        contourFinder.setFindHoles(holes);
+        contourFinder.findContours(image);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(0);
     ofSetColor(255);
+    ofFill();
+//    contourFinder.draw();
     
-    for (ofPolyline line : lines) {
-        line.draw();
+    for (int i = 0; i < contourFinder.size(); i++) {
+        ofPolyline polyline = contourFinder.getPolyline(i);
+        polyline.simplify();
+        polyline = polyline.getSmoothed(smoothing);
+        vector<ofPoint> & vertices = polyline.getVertices();
+        
+        ofBeginShape();
+        for (int j = 0; j < vertices.size(); j++) {
+            ofVertex(vertices[j]);
+        }
+        ofEndShape();
     }
+    
+    gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -36,32 +76,17 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    if (button == OF_MOUSE_BUTTON_LEFT && !lines.empty()) {
-        // the & operator gives us a reference to the polyline, instead of a copy of it
-        ofPolyline & line = lines[lines.size() - 1];
-        line.addVertex(x, y);
-        
-        if (line.size() > 100) {
-            vector<ofPoint> & vertices = line.getVertices();
-            vertices.erase(vertices.begin());
-        }
-    }
+
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    if (button == OF_MOUSE_BUTTON_LEFT) {
-        ofPolyline line;
-        line.addVertex(x, y);
-        lines.push_back(line);
-    } else if (button == OF_MOUSE_BUTTON_RIGHT) {
-        lines.clear();
-    }
+
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    
+
 }
 
 //--------------------------------------------------------------
