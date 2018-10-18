@@ -4,7 +4,7 @@
 void ofApp::setup(){
     frameRate = 30;
     minDelay = 0.1;
-    maxDelay = 0.75;
+    maxDelay = 2.0;
     
     grabber.setDesiredFrameRate(frameRate);
     grabber.setup(320, 240);
