@@ -1,6 +1,6 @@
 # openFrameworks FlyBy Code Examples
 
-This repo contains code examples for a brief intro to openFrameworks workshop taught at NYU ITP in October 2018.
+This repo contains code examples for a brief intro to openFrameworks workshop taught at NYU ITP in October 2018. The slides can be found [here](https://slides.com/oshoham/intro-to-openframeworks-and-c).
 
 ## Auto-Generated Project Structure
 
