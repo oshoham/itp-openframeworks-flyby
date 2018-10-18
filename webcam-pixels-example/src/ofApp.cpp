@@ -14,12 +14,12 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(0);
     ofSetColor(255);
-    
+
     ofPixels pixels = grabber.getPixels();
     pixels.mirror(false, true);
-    
+
     int spacing = ofMap(ofGetMouseX(), 0, ofGetWidth(), 6, 40, true);
-    
+
     for (int i = 0; i < pixels.getWidth(); i += spacing) {
         for (int j = 0; j < pixels.getHeight(); j += spacing) {
             ofColor color = pixels.getColor(i, j);
@@ -28,9 +28,7 @@ void ofApp::draw(){
         }
     }
 
-//    ofImage img;
-//    img.setFromPixels(pixels);
-//    img.draw(0, 0);
+    // grabber.draw();
 }
 
 //--------------------------------------------------------------
@@ -84,6 +82,6 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }

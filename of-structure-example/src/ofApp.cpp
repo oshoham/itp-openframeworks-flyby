@@ -64,13 +64,8 @@ void ofApp::windowResized(int w, int h){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
     cout << "dragEvent (" << dragInfo.position.x << ", " << dragInfo.position.y << ")" << endl;
-    
+
     for (int i = 0; i < dragInfo.files.size(); i++){
         cout << dragInfo.files[i] << endl;
     }
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-    cout << "gotMessage (" << msg.message << ")" << endl;
 }
